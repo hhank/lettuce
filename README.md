@@ -1,3 +1,15 @@
+# IMPORTANT
+NOTE BEGIN
+This version of lettuce has been modify so that it runs with python 3.2 and is not compatible with prio version of python.
+
+Sucessful run with python 3.2.2 and following the tutorial available at:
+http://lettuce.it/tutorial/simple.html#tutorial-simple
+
+This by all mean is *not* the official version of lettuce, for the original please go to http://lettuce.it 
+
+NOTE END
+
+
 # lettuce
 > Version 0.1.33 - barium
 
