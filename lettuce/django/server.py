@@ -18,12 +18,12 @@ import os
 import sys
 import time
 import socket
-import httplib
-import urlparse
+import http.client
+import urllib.parse
 import tempfile
 import multiprocessing
 
-from StringIO import StringIO
+from io import StringIO
 
 from django.conf import settings
 from django.core.handlers.wsgi import WSGIHandler
@@ -38,8 +38,8 @@ except ImportError:
     StaticFilesHandler = None
 
 try:
-    import SocketServer
-    SocketServer.BaseServer.handle_error = lambda *args, **kw: None
+    import socketserver
+    socketserver.BaseServer.handle_error = lambda *args, **kw: None
 except ImportError:
     pass
 
@@ -117,7 +117,7 @@ class ThreadedServer(multiprocessing.Process):
 
         while True:
             time.sleep(0.1)
-            http = httplib.HTTPConnection(address, self.port)
+            http = http.client.HTTPConnection(address, self.port)
             try:
                 http.request("GET", "/")
             except socket.error:
@@ -155,13 +155,13 @@ class ThreadedServer(multiprocessing.Process):
             finally:
                 os.unlink(pidfile)
 
-        open(pidfile, 'w').write(unicode(os.getpid()))
+        open(pidfile, 'w').write(str(os.getpid()))
 
         connector = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
         try:
             s = connector.connect((self.address, self.port))
-            print s
+            print(s)
             self.lock.release()
             os.kill(os.getpid(), 9)
         except socket.error:
@@ -204,7 +204,7 @@ class Server(object):
 
     def __init__(self, address='0.0.0.0', port=None):
         self.port = int(port or getattr(settings, 'LETTUCE_SERVER_PORT', 8000))
-        self.address = unicode(address)
+        self.address = str(address)
         self._actual_server = ThreadedServer(self.address, self.port)
 
     def start(self):
@@ -215,7 +215,7 @@ class Server(object):
             if getattr(settings, 'LETTUCE_SERVE_ADMIN_MEDIA', False):
                 msg += ' (as per settings.LETTUCE_SERVE_ADMIN_MEDIA=True)'
 
-            print "%s..." % msg
+            print("%s..." % msg)
 
         self._actual_server.start()
         self._actual_server.wait()
@@ -230,7 +230,7 @@ class Server(object):
                 'python manage.py --no-server' % addrport,
             )
 
-        print "Django's builtin server is running at %s:%d" % addrport
+        print("Django's builtin server is running at %s:%d" % addrport)
 
     def stop(self, fail=False):
         pid = self._actual_server.pid
@@ -247,4 +247,4 @@ class Server(object):
         if self.port is not 80:
             base_url += ':%d' % self.port
 
-        return urlparse.urljoin(base_url, url)
+        return urllib.parse.urljoin(base_url, url)

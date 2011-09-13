@@ -14,12 +14,14 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+# (c) 2005 Ian Bicking and contributors; written for Paste (http://pythonpaste.org)
+# Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
 version = '0.1.33'
 release = 'barium'
 
 import os
 import sys
+import imp
 from datetime import datetime
 
 from lettuce import fs
@@ -51,15 +53,15 @@ __all__ = [
 
 try:
     terrain = fs.FileSystem._import("terrain")
-    reload(terrain)
-except Exception, e:
+    imp.reload(terrain)
+except Exception as e:
     if not "No module named terrain" in str(e):
         string = 'Lettuce has tried to load the conventional environment ' \
             'module "terrain"\nbut it has errors, check its contents and ' \
             'try to run lettuce again.\n\nOriginal traceback below:\n\n'
 
         sys.stderr.write(string)
-        sys.stderr.write(exceptions.traceback.format_exc(e))
+        sys.stderr.write(exceptions.traceback.format_exc())
         raise SystemExit(1)
 
 
@@ -83,7 +85,7 @@ class Runner(object):
         sys.path.insert(0, base_path)
         self.loader = fs.FeatureLoader(base_path)
         self.verbosity = verbosity
-        self.scenarios = scenarios and map(int, scenarios.split(",")) or None
+        self.scenarios = scenarios and list(map(int, scenarios.split(","))) or None
 
         sys.path.remove(base_path)
 
@@ -101,7 +103,7 @@ class Runner(object):
         if enable_xunit:
             xunit_output.enable(filename=xunit_filename)
 
-        reload(output)
+        imp.reload(output)
 
         self.output = output
 
@@ -112,8 +114,8 @@ class Runner(object):
         started_at = datetime.now()
         try:
             self.loader.find_and_load_step_definitions()
-        except StepLoadingError, e:
-            print "Error loading step definitions:\n", e
+        except StepLoadingError as e:
+            print("Error loading step definitions:\n", e)
             return
 
         call_hook('before', 'all')
@@ -135,13 +137,14 @@ class Runner(object):
                 results.append(
                     feature.run(self.scenarios))
 
-        except exceptions.LettuceSyntaxError, e:
+        except exceptions.LettuceSyntaxError as e:
             sys.stderr.write(e.msg)
             failed = True
         except:
+            import traceback
+            #print( traceback.format_exc() )
             e = sys.exc_info()[1]
-            print "Died with %s" % str(e)
-            traceback.print_exc()
+            print("Died with reason: %s" % str(e))
             failed = True
 
         finally:
@@ -159,10 +162,10 @@ class Runner(object):
             minutes = time_took.seconds / 60
             seconds = time_took.seconds
             if hours:
-                print  "(finished within %d hours)" % hours
+                print("(finished within %d hours)" % hours)
             elif minutes:
-                print  "(finished within %d minutes)" % minutes
+                print("(finished within %d minutes)" % minutes)
             elif seconds:
-                print  "(finished within %d seconds)" % seconds
+                print("(finished within %d seconds)" % seconds)
 
             return total

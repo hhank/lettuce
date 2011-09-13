@@ -27,7 +27,7 @@ from lettuce.terrain import before
 
 
 def wrt(what):
-    sys.stdout.write(what.encode('utf-8'))
+    sys.stdout.buffer.write(what.encode('utf-8'))
 
 
 def wrap_file_and_line(string, start, end):
@@ -117,7 +117,10 @@ def print_step_ran(step):
     if step.failed:
         wrt("\033[1;31m")
         pspaced = lambda x: wrt("%s%s" % (" " * step.indentation, x))
-        lines = step.why.traceback.splitlines()
+        if step.why is not None:
+            lines = step.why.traceback.splitlines()
+        else:
+            lines = ['Internal Error? step.why is None!']
 
         for pindex, line in enumerate(lines):
             pspaced(line)
@@ -206,7 +209,7 @@ def print_end(total):
         'undefined': '\033[0;33m'
     }
 
-    for kind, color in kinds_and_colors.items():
+    for kind, color in list(kinds_and_colors.items()):
         attr = 'steps_%s' % kind
         stotal = getattr(total, attr)
         if stotal:
@@ -230,7 +233,7 @@ def print_end(total):
         last = len(total.proposed_definitions) - 1
         for current, step in enumerate(total.proposed_definitions):
             method_name = step.proposed_method_name
-            wrt("@step(u'%s')\n" % step.proposed_sentence)
+            wrt("@step('%s')\n" % step.proposed_sentence)
             wrt("def %s:\n" % method_name)
             wrt("    assert False, 'This step must be implemented'")
             if current is last:

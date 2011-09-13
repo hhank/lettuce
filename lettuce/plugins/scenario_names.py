@@ -37,13 +37,13 @@ def print_scenario_running(scenario):
 @after.each_scenario
 def print_scenario_ran(scenario):
     if scenario.passed:
-        print "OK"
+        print("OK")
     elif scenario.failed:
         reason = scenarios_and_its_fails[scenario]
         if isinstance(reason.exception, AssertionError):
-            print "FAILED"
+            print("FAILED")
         else:
-            print "ERROR"
+            print("ERROR")
 
 
 @after.each_step
@@ -56,7 +56,7 @@ def save_step_failed(step):
 @after.all
 def print_end(total):
     if total.scenarios_passed < total.scenarios_ran:
-        print  # just a line to separate things here
+        print()  # just a line to separate things here
         for scenario in failed_scenarios:
             reason = scenarios_and_its_fails[scenario]
             wrt(reason.traceback)

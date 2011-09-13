@@ -23,8 +23,8 @@ world._set = False
 
 
 def _function_matches(one, other):
-    return (one.func_code.co_filename == other.func_code.co_filename and
-            one.func_code.co_firstlineno == other.func_code.co_firstlineno)
+    return (one.__code__.co_filename == other.__code__.co_filename and
+            one.__code__.co_firstlineno == other.__code__.co_firstlineno)
 
 
 class CallbackDict(dict):
@@ -33,8 +33,8 @@ class CallbackDict(dict):
             self[where][when].append(function)
 
     def clear(self):
-        for name, action_dict in self.items():
-            for callback_list in action_dict.values():
+        for name, action_dict in list(self.items()):
+            for callback_list in list(action_dict.values()):
                 callback_list[:] = []
 
 
@@ -82,9 +82,10 @@ def call_hook(situation, kind, *args, **kw):
     for callback in CALLBACK_REGISTRY[kind][situation]:
         try:
             callback(*args, **kw)
-        except Exception, e:
-            traceback.print_exc(e)
-            print
+        except Exception as e:
+            print("OHLALA: ", str(e))
+            traceback.print_exc()
+            print("OMG")
             sys.exit(2)
 
 

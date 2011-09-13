@@ -112,7 +112,7 @@ def print_end(total):
         wrt("from lettuce import step\n\n")
         for step in total.proposed_definitions:
             method_name = step.proposed_method_name
-            wrt("@step(u'%s')\n" % step.proposed_sentence)
+            wrt("@step('%s')\n" % step.proposed_sentence)
             wrt("def %s:\n" % method_name)
             wrt("    assert False, 'This step must be implemented'\n")
 

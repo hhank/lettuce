@@ -38,7 +38,7 @@ if sys.version_info[:2] < (2, 6):
 setup(name='lettuce',
     version=version,
     description='Behaviour Driven Development for python',
-    author=u'Gabriel Falcao',
+    author='Gabriel Falcao',
     author_email='gabriel@nacaolivre.org',
     url='http://github.com/gabrielfalcao/lettuce',
     packages=get_packages(),

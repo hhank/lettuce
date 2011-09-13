@@ -19,7 +19,7 @@ from lettuce import core
 from nose.tools import assert_equals
 from nose.tools import assert_not_equals
 
-STEP_WITH_TABLE = u'''
+STEP_WITH_TABLE = '''
 Given I have the following items in my shelf:
       | name  | description                                           |
       | Glass | a nice glass to drink grape juice                     |
@@ -79,7 +79,7 @@ def test_feature_description():
         "string, and keeps the relative path for filename, line " \
         "and description lines"
 
-    string = u'''
+    string = '''
     # lang: en-us
     Feature: FEATURE NAME! #@@$%ˆ&*)(*%$E#
     here comes
@@ -153,7 +153,7 @@ def test_step_represent_table():
         '      | Pasta | a pasta to cook and eat with grape juice in the glass |\n'
     )
 
-SCENARIO_OUTLINE = u'''
+SCENARIO_OUTLINE = '''
 Scenario: Regular numbers
                                Given I do fill description with '<value_one>'
                                And then, age with with '<and_other>'

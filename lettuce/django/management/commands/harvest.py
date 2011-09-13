@@ -31,13 +31,13 @@ from lettuce.django.server import LettuceServerException
 
 
 class Command(BaseCommand):
-    help = u'Run lettuce tests all along installed apps'
+    help = 'Run lettuce tests all along installed apps'
     args = '[PATH to feature file or folder]'
     requires_model_validation = False
 
     option_list = BaseCommand.option_list[1:] + (
         make_option('-v', '--verbosity', action='store', dest='verbosity', default='4',
-            type='choice', choices=map(str, range(5)),
+            type='choice', choices=list(map(str, list(range(5)))),
             help='Verbosity level; 0=no output, 1=only dots, 2=only scenario names, 3=colorless output, 4=normal output (colorful)'),
 
         make_option('-a', '--apps', action='store', dest='apps', default='',
@@ -67,7 +67,7 @@ class Command(BaseCommand):
 
     def get_paths(self, args, apps_to_run, apps_to_avoid):
         if args:
-            for path, exists in zip(args, map(os.path.exists, args)):
+            for path, exists in zip(args, list(map(os.path.exists, args))):
                 if not exists:
                     sys.stderr.write("You passed the path '%s', but it does not exist.\n" % path)
                     sys.exit(1)
@@ -92,7 +92,7 @@ class Command(BaseCommand):
         if run_server:
             try:
                 server.start()
-            except LettuceServerException, e:
+            except LettuceServerException as e:
                 raise SystemExit(e)
 
         os.environ['SERVER_NAME'] = server.address
@@ -122,7 +122,7 @@ class Command(BaseCommand):
                 if not result or result.steps != result.steps_passed:
                     failed = True
 
-        except Exception, e:
+        except Exception as e:
             import traceback
             traceback.print_exc(e)
 

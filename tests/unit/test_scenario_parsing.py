@@ -392,7 +392,7 @@ def test_full_featured_feature():
     for ((got_examples, got_steps), (expected_examples, expected_steps)) in zip(scenario4.evaluated, expected_evaluated):
         sentences_of = lambda x: x.sentence
         assert_equals(got_examples, expected_examples)
-        assert_equals(map(sentences_of, got_steps), expected_steps)
+        assert_equals(list(map(sentences_of, got_steps)), expected_steps)
 
 def test_scenario_with_table_and_no_step_fails():
     "A step table imediately after the scenario line, without step line fails"
@@ -429,5 +429,5 @@ def test_scenario_aggregate_all_examples_blocks():
 def test_commented_scenarios():
     "A scenario string that contains lines starting with '#' will be commented"
     scenario = Scenario.from_string(COMMENTED_SCENARIO)
-    assert_equals(scenario.name, u'Adding some students to my university database')
+    assert_equals(scenario.name, 'Adding some students to my university database')
     assert_equals(len(scenario.steps), 4)

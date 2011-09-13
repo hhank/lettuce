@@ -16,7 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import re
 import sys
-from StringIO import StringIO
+from io import StringIO
 from nose.tools import assert_equals, assert_not_equals
 from lettuce import registry
 from difflib import Differ
@@ -36,13 +36,13 @@ def prepare_stderr():
     sys.stderr = std
 
 def assert_lines(original, expected):
-    original = original.decode('utf-8') if isinstance(original, basestring) else original
+    original = original.decode('utf-8') if isinstance(original, str) else original
     assert_lines_unicode(original, expected)
 
 def assert_lines_unicode(original, expected):
     if original != expected:
         diff = ''.join(list(Differ().compare(expected.splitlines(1), original.splitlines(1))))
-        raise AssertionError, 'Output differed as follows:\n' + diff + "\nOutput was:\n" + original +"\nExpected was:\n"+expected
+        raise AssertionError('Output differed as follows:\n' + diff + "\nOutput was:\n" + original +"\nExpected was:\n"+expected)
     assert_equals(len(expected), len(original), 'Output appears equal, but of different lengths.')
 
 def assert_lines_with_traceback(one, other):
@@ -65,7 +65,7 @@ def assert_lines_with_traceback(one, other):
     assert_unicode_equals(len(lines_one), len(lines_other))
 
 def assert_unicode_equals(original, expected):
-    if isinstance(original, basestring):
+    if isinstance(original, str):
         original = original.decode('utf-8')
 
     assert_equals(original, expected)

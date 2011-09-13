@@ -125,14 +125,14 @@ def test_wise_startswith_also_strips_the_string():
 def test_remove_it_accepts_regex_to_remove_all_from_string():
     "strings.remove_it accepts regex and remove all matches from string"
     assert_equals(
-        strings.remove_it(u"Gabriel Falcão", u"[aã]"),
+        strings.remove_it("Gabriel Falcão", "[aã]"),
         "Gbriel Flco"
     )
 
 def test_column_width():
     "strings.column_width"
     assert_equals(
-        strings.column_width(u"あいうえお"),
+        strings.column_width("あいうえお"),
         10
     )
 
@@ -176,7 +176,7 @@ def test_dicts_to_string():
 
     dicts = [
         {
-            'name': u'Gabriel Falcão',
+            'name': 'Gabriel Falcão',
             'age': 22
         },
         {
@@ -188,9 +188,9 @@ def test_dicts_to_string():
 
     assert_equals(
         strings.dicts_to_string(dicts, ['name', 'age']),
-        u"| name           | age |\n"
-        u"| Gabriel Falcão | 22  |\n"
-        u"| Miguel         | 19  |\n"
+        "| name           | age |\n"
+        "| Gabriel Falcão | 22  |\n"
+        "| Miguel         | 19  |\n"
     )
 
 def test_dicts_to_string_escapes_pipe():
@@ -198,7 +198,7 @@ def test_dicts_to_string_escapes_pipe():
 
     dicts = [
         {
-            'name': u'Gabriel | Falcão',
+            'name': 'Gabriel | Falcão',
             'age': 22
         },
         {
@@ -210,9 +210,9 @@ def test_dicts_to_string_escapes_pipe():
 
     assert_equals(
         strings.dicts_to_string(dicts, ['name', 'age']),
-        u"| name             | age |\n"
-        u"| Gabriel \\| Falcão | 22  |\n"
-        u"| Miguel \\| Arcanjo | 19  |\n"
+        "| name             | age |\n"
+        "| Gabriel \\| Falcão | 22  |\n"
+        "| Miguel \\| Arcanjo | 19  |\n"
     )
 
 def test_dicts_to_string_allows_empty():
@@ -220,7 +220,7 @@ def test_dicts_to_string_allows_empty():
 
     dicts = [
         {
-            'name': u'Gabriel | Falcão',
+            'name': 'Gabriel | Falcão',
             'age': 22
         },
         {
@@ -229,31 +229,31 @@ def test_dicts_to_string_allows_empty():
     ]
     assert_equals(
         strings.dicts_to_string(dicts, ['name', 'age']),
-        u"| name             | age |\n"
-        u"| Gabriel \\| Falcão | 22  |\n"
-        u"| Miguel \\| Arcanjo |     |\n"
+        "| name             | age |\n"
+        "| Gabriel \\| Falcão | 22  |\n"
+        "| Miguel \\| Arcanjo |     |\n"
     )
 
 def test_parse_hashes():
     "strings.parse_hashes"
 
-    keys = [u'name', u'age']
+    keys = ['name', 'age']
     dicts = [
         {
-            u'name': u'Gabriel Falcão',
-            u'age': u'22'
+            'name': 'Gabriel Falcão',
+            'age': '22'
         },
         {
-            u'name': u'Miguel',
-            u'age': u'33'
+            'name': 'Miguel',
+            'age': '33'
         }
 
     ]
 
     table = [
-        u"| name           | age |\n",
-        u"| Gabriel Falcão | 22  |\n",
-        u"| Miguel         | 33  |\n",
+        "| name           | age |\n",
+        "| Gabriel Falcão | 22  |\n",
+        "| Miguel         | 33  |\n",
     ]
 
     got_keys, got_dicts = strings.parse_hashes(table)
@@ -264,23 +264,23 @@ def test_parse_hashes():
 def test_parse_hashes_escapes_pipes():
     "strings.parse_hashes escapes pipe"
 
-    keys = [u'name', u'age']
+    keys = ['name', 'age']
     dicts = [
         {
-            u'name': u'Gabriel | Falcão',
-            u'age': u'22'
+            'name': 'Gabriel | Falcão',
+            'age': '22'
         },
         {
-            u'name': u'Miguel | Silva',
-            u'age': u'33'
+            'name': 'Miguel | Silva',
+            'age': '33'
         }
 
     ]
 
     table = [
-        u"| name              | age |\n",
-        u"| Gabriel \| Falcão | 22  |\n",
-        u"| Miguel \| Silva   | 33  |\n",
+        "| name              | age |\n",
+        "| Gabriel \| Falcão | 22  |\n",
+        "| Miguel \| Silva   | 33  |\n",
     ]
 
     got_keys, got_dicts = strings.parse_hashes(table)
@@ -292,28 +292,28 @@ def test_parse_hashes_escapes_pipes():
 def test_parse_hashes_allow_empty():
     "strings.parse_hashes allow empty"
 
-    keys = [u'name', u'age']
+    keys = ['name', 'age']
     dicts = [
         {
-            u'name': u'Gabriel',
-            u'age': u'22'
+            'name': 'Gabriel',
+            'age': '22'
         },
         {
-            u'name': u'',
-            u'age': u'33'
+            'name': '',
+            'age': '33'
         },
         {
-            u'name': u'Dave',
-            u'age': u''
+            'name': 'Dave',
+            'age': ''
         }
 
     ]
 
     table = [
-        u"| name    | age |\n",
-        u"| Gabriel | 22  |\n",
-        u"|         | 33  |\n",
-        u"| Dave    |     |\n",
+        "| name    | age |\n",
+        "| Gabriel | 22  |\n",
+        "|         | 33  |\n",
+        "| Dave    |     |\n",
     ]
 
     got_keys, got_dicts = strings.parse_hashes(table)

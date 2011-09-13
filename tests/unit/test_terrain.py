@@ -23,6 +23,7 @@ from lettuce.terrain import before
 from lettuce.terrain import world
 from lettuce.core import Feature, TotalResult
 from lettuce.registry import CALLBACK_REGISTRY
+import collections
 
 FEATURE1 = '''
 Feature: Before and After callbacks all along lettuce
@@ -184,7 +185,7 @@ def test_after_each_all_is_executed_before_each_all():
     mox.UnsetStubs()
 
 def test_world_should_be_able_to_absorb_functions():
-    u"world should be able to absorb functions"
+    "world should be able to absorb functions"
     assert not hasattr(world, 'function1')
 
     @world.absorb
@@ -192,7 +193,7 @@ def test_world_should_be_able_to_absorb_functions():
         return 'absorbed'
 
     assert hasattr(world, 'function1')
-    assert callable(world.function1)
+    assert isinstance(world.function1, collections.Callable)
 
     assert_equals(world.function1(), 'absorbed')
 
@@ -201,13 +202,13 @@ def test_world_should_be_able_to_absorb_functions():
     assert not hasattr(world, 'function1')
 
 def test_world_should_be_able_to_absorb_lambdas():
-    u"world should be able to absorb lambdas"
+    "world should be able to absorb lambdas"
     assert not hasattr(world, 'named_func')
 
     world.absorb(lambda: 'absorbed', 'named_func')
 
     assert hasattr(world, 'named_func')
-    assert callable(world.named_func)
+    assert isinstance(world.named_func, collections.Callable)
 
     assert_equals(world.named_func(), 'absorbed')
 
@@ -216,7 +217,7 @@ def test_world_should_be_able_to_absorb_lambdas():
     assert not hasattr(world, 'named_func')
 
 def test_world_should_be_able_to_absorb_classs():
-   u"world should be able to absorb classs"
+   "world should be able to absorb classs"
    assert not hasattr(world, 'MyClass')
 
    @world.absorb

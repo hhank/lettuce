@@ -17,7 +17,7 @@
 import os
 import lettuce
 
-from StringIO import StringIO
+from io import StringIO
 from os.path import dirname, join, abspath
 from nose.tools import assert_equals, with_setup, assert_raises
 from lettuce.fs import FeatureLoader
@@ -40,7 +40,7 @@ ojoin = lambda *x: join(current_dir, 'output_features', *x)
 sjoin = lambda *x: join(current_dir, 'syntax_features', *x)
 lettuce_path = lambda *x: fs.relpath(join(lettuce_dir, *x))
 
-call_line = StepDefinition.__call__.im_func.func_code.co_firstlineno + 5
+call_line = StepDefinition.__call__.__func__.__code__.co_firstlineno + 5
 
 def feature_name(name):
     return join(abspath(dirname(__file__)), 'output_features', name, "%s.feature" % name)
@@ -699,24 +699,24 @@ def test_output_snippets_with_groups_within_double_quotes_colorless():
     runner.run()
 
     assert_stdout_lines(
-        u'\n'
-        u'Feature: double-quoted snippet proposal                          # tests/functional/output_features/double-quoted-snippet/double-quoted-snippet.feature:1\n'
-        u'\n'
-        u'  Scenario: Propose matched groups                               # tests/functional/output_features/double-quoted-snippet/double-quoted-snippet.feature:2\n'
-        u'    Given I have "stuff here" and "more @#$%ˆ& bizar sutff h3r3" # tests/functional/output_features/double-quoted-snippet/double-quoted-snippet.feature:3 (undefined)\n'
-        u'\n'
-        u'1 feature (0 passed)\n'
-        u'1 scenario (0 passed)\n'
-        u'1 step (1 undefined, 0 passed)\n'
-        u'\n'
-        u'You can implement step definitions for undefined steps with these snippets:\n'
-        u'\n'
-        u"# -*- coding: utf-8 -*-\n"
-        u'from lettuce import step\n'
-        u'\n'
-        u'@step(u\'Given I have "([^\"]*)" and "([^\"]*)"\')\n'
-        u'def given_i_have_group1_and_group2(step, group1, group2):\n'
-        u'    assert False, \'This step must be implemented\'\n'
+        '\n'
+        'Feature: double-quoted snippet proposal                          # tests/functional/output_features/double-quoted-snippet/double-quoted-snippet.feature:1\n'
+        '\n'
+        '  Scenario: Propose matched groups                               # tests/functional/output_features/double-quoted-snippet/double-quoted-snippet.feature:2\n'
+        '    Given I have "stuff here" and "more @#$%ˆ& bizar sutff h3r3" # tests/functional/output_features/double-quoted-snippet/double-quoted-snippet.feature:3 (undefined)\n'
+        '\n'
+        '1 feature (0 passed)\n'
+        '1 scenario (0 passed)\n'
+        '1 step (1 undefined, 0 passed)\n'
+        '\n'
+        'You can implement step definitions for undefined steps with these snippets:\n'
+        '\n'
+        "# -*- coding: utf-8 -*-\n"
+        'from lettuce import step\n'
+        '\n'
+        '@step(u\'Given I have "([^\"]*)" and "([^\"]*)"\')\n'
+        'def given_i_have_group1_and_group2(step, group1, group2):\n'
+        '    assert False, \'This step must be implemented\'\n'
     )
 
 @with_setup(prepare_stdout)
@@ -727,24 +727,24 @@ def test_output_snippets_with_groups_within_double_quotes_colorful():
     runner.run()
 
     assert_stdout_lines(
-        u'\n'
-        u'\033[1;37mFeature: double-quoted snippet proposal                          \033[1;30m# tests/functional/output_features/double-quoted-snippet/double-quoted-snippet.feature:1\033[0m\n'
-        u'\n'
-        u'\033[1;37m  Scenario: Propose matched groups                               \033[1;30m# tests/functional/output_features/double-quoted-snippet/double-quoted-snippet.feature:2\033[0m\n'
-        u'\033[0;33m    Given I have "stuff here" and "more @#$%ˆ& bizar sutff h3r3" \033[1;30m# tests/functional/output_features/double-quoted-snippet/double-quoted-snippet.feature:3\033[0m\n'
-        u'\n'
+        '\n'
+        '\033[1;37mFeature: double-quoted snippet proposal                          \033[1;30m# tests/functional/output_features/double-quoted-snippet/double-quoted-snippet.feature:1\033[0m\n'
+        '\n'
+        '\033[1;37m  Scenario: Propose matched groups                               \033[1;30m# tests/functional/output_features/double-quoted-snippet/double-quoted-snippet.feature:2\033[0m\n'
+        '\033[0;33m    Given I have "stuff here" and "more @#$%ˆ& bizar sutff h3r3" \033[1;30m# tests/functional/output_features/double-quoted-snippet/double-quoted-snippet.feature:3\033[0m\n'
+        '\n'
         "\033[1;37m1 feature (\033[0;31m0 passed\033[1;37m)\033[0m\n" \
         "\033[1;37m1 scenario (\033[0;31m0 passed\033[1;37m)\033[0m\n" \
         "\033[1;37m1 step (\033[0;33m1 undefined\033[1;37m, \033[1;32m0 passed\033[1;37m)\033[0m\n"
-        u'\n'
-        u'\033[0;33mYou can implement step definitions for undefined steps with these snippets:\n'
-        u'\n'
-        u"# -*- coding: utf-8 -*-\n"
-        u'from lettuce import step\n'
-        u'\n'
-        u'@step(u\'Given I have "([^"]*)" and "([^"]*)"\')\n'
-        u'def given_i_have_group1_and_group2(step, group1, group2):\n'
-        u'    assert False, \'This step must be implemented\'\033[0m\n'
+        '\n'
+        '\033[0;33mYou can implement step definitions for undefined steps with these snippets:\n'
+        '\n'
+        "# -*- coding: utf-8 -*-\n"
+        'from lettuce import step\n'
+        '\n'
+        '@step(u\'Given I have "([^"]*)" and "([^"]*)"\')\n'
+        'def given_i_have_group1_and_group2(step, group1, group2):\n'
+        '    assert False, \'This step must be implemented\'\033[0m\n'
     )
 
 
@@ -756,24 +756,24 @@ def test_output_snippets_with_groups_within_single_quotes_colorless():
     runner.run()
 
     assert_stdout_lines(
-        u'\n'
-        u'Feature: single-quoted snippet proposal                          # tests/functional/output_features/single-quoted-snippet/single-quoted-snippet.feature:1\n'
-        u'\n'
-        u'  Scenario: Propose matched groups                               # tests/functional/output_features/single-quoted-snippet/single-quoted-snippet.feature:2\n'
-        u'    Given I have \'stuff here\' and \'more @#$%ˆ& bizar sutff h3r3\' # tests/functional/output_features/single-quoted-snippet/single-quoted-snippet.feature:3 (undefined)\n'
-        u'\n'
-        u'1 feature (0 passed)\n'
-        u'1 scenario (0 passed)\n'
-        u'1 step (1 undefined, 0 passed)\n'
-        u'\n'
-        u'You can implement step definitions for undefined steps with these snippets:\n'
-        u'\n'
-        u"# -*- coding: utf-8 -*-\n"
-        u'from lettuce import step\n'
-        u'\n'
-        u'@step(u\'Given I have \\\'([^\\\']*)\\\' and \\\'([^\\\']*)\\\'\')\n'
-        u'def given_i_have_group1_and_group2(step, group1, group2):\n'
-        u'    assert False, \'This step must be implemented\'\n'
+        '\n'
+        'Feature: single-quoted snippet proposal                          # tests/functional/output_features/single-quoted-snippet/single-quoted-snippet.feature:1\n'
+        '\n'
+        '  Scenario: Propose matched groups                               # tests/functional/output_features/single-quoted-snippet/single-quoted-snippet.feature:2\n'
+        '    Given I have \'stuff here\' and \'more @#$%ˆ& bizar sutff h3r3\' # tests/functional/output_features/single-quoted-snippet/single-quoted-snippet.feature:3 (undefined)\n'
+        '\n'
+        '1 feature (0 passed)\n'
+        '1 scenario (0 passed)\n'
+        '1 step (1 undefined, 0 passed)\n'
+        '\n'
+        'You can implement step definitions for undefined steps with these snippets:\n'
+        '\n'
+        "# -*- coding: utf-8 -*-\n"
+        'from lettuce import step\n'
+        '\n'
+        '@step(u\'Given I have \\\'([^\\\']*)\\\' and \\\'([^\\\']*)\\\'\')\n'
+        'def given_i_have_group1_and_group2(step, group1, group2):\n'
+        '    assert False, \'This step must be implemented\'\n'
     )
 
 @with_setup(prepare_stdout)
@@ -784,24 +784,24 @@ def test_output_snippets_with_groups_within_single_quotes_colorful():
     runner.run()
 
     assert_stdout_lines(
-        u'\n'
-        u'\033[1;37mFeature: single-quoted snippet proposal                          \033[1;30m# tests/functional/output_features/single-quoted-snippet/single-quoted-snippet.feature:1\033[0m\n'
-        u'\n'
-        u'\033[1;37m  Scenario: Propose matched groups                               \033[1;30m# tests/functional/output_features/single-quoted-snippet/single-quoted-snippet.feature:2\033[0m\n'
-        u'\033[0;33m    Given I have \'stuff here\' and \'more @#$%ˆ& bizar sutff h3r3\' \033[1;30m# tests/functional/output_features/single-quoted-snippet/single-quoted-snippet.feature:3\033[0m\n'
-        u'\n'
+        '\n'
+        '\033[1;37mFeature: single-quoted snippet proposal                          \033[1;30m# tests/functional/output_features/single-quoted-snippet/single-quoted-snippet.feature:1\033[0m\n'
+        '\n'
+        '\033[1;37m  Scenario: Propose matched groups                               \033[1;30m# tests/functional/output_features/single-quoted-snippet/single-quoted-snippet.feature:2\033[0m\n'
+        '\033[0;33m    Given I have \'stuff here\' and \'more @#$%ˆ& bizar sutff h3r3\' \033[1;30m# tests/functional/output_features/single-quoted-snippet/single-quoted-snippet.feature:3\033[0m\n'
+        '\n'
         "\033[1;37m1 feature (\033[0;31m0 passed\033[1;37m)\033[0m\n" \
         "\033[1;37m1 scenario (\033[0;31m0 passed\033[1;37m)\033[0m\n" \
         "\033[1;37m1 step (\033[0;33m1 undefined\033[1;37m, \033[1;32m0 passed\033[1;37m)\033[0m\n"
-        u'\n'
-        u'\033[0;33mYou can implement step definitions for undefined steps with these snippets:\n'
-        u'\n'
-        u"# -*- coding: utf-8 -*-\n"
-        u'from lettuce import step\n'
-        u'\n'
-        u'@step(u\'Given I have \\\'([^\\\']*)\\\' and \\\'([^\\\']*)\\\'\')\n'
-        u'def given_i_have_group1_and_group2(step, group1, group2):\n'
-        u'    assert False, \'This step must be implemented\'\033[0m\n'
+        '\n'
+        '\033[0;33mYou can implement step definitions for undefined steps with these snippets:\n'
+        '\n'
+        "# -*- coding: utf-8 -*-\n"
+        'from lettuce import step\n'
+        '\n'
+        '@step(u\'Given I have \\\'([^\\\']*)\\\' and \\\'([^\\\']*)\\\'\')\n'
+        'def given_i_have_group1_and_group2(step, group1, group2):\n'
+        '    assert False, \'This step must be implemented\'\033[0m\n'
     )
 
 @with_setup(prepare_stdout)
@@ -812,25 +812,25 @@ def test_output_snippets_with_groups_within_redundant_quotes():
     runner.run()
 
     assert_stdout_lines(
-        u'\n'
-        u'Feature: avoid duplicating same snippet                          # tests/functional/output_features/redundant-steps-quotes/redundant-steps-quotes.feature:1\n'
-        u'\n'
-        u'  Scenario: Propose matched groups                               # tests/functional/output_features/redundant-steps-quotes/redundant-steps-quotes.feature:2\n'
-        u'    Given I have "stuff here" and "more @#$%ˆ& bizar sutff h3r3" # tests/functional/output_features/redundant-steps-quotes/redundant-steps-quotes.feature:3 (undefined)\n'
-        u'    Given I have "blablabla" and "12345"                         # tests/functional/output_features/redundant-steps-quotes/redundant-steps-quotes.feature:4 (undefined)\n'
-        u'\n'
-        u'1 feature (0 passed)\n'
-        u'1 scenario (0 passed)\n'
-        u'2 steps (2 undefined, 0 passed)\n'
-        u'\n'
-        u'You can implement step definitions for undefined steps with these snippets:\n'
-        u'\n'
-        u"# -*- coding: utf-8 -*-\n"
-        u'from lettuce import step\n'
-        u'\n'
-        u'@step(u\'Given I have "([^"]*)" and "([^"]*)"\')\n'
-        u'def given_i_have_group1_and_group2(step, group1, group2):\n'
-        u'    assert False, \'This step must be implemented\'\n'
+        '\n'
+        'Feature: avoid duplicating same snippet                          # tests/functional/output_features/redundant-steps-quotes/redundant-steps-quotes.feature:1\n'
+        '\n'
+        '  Scenario: Propose matched groups                               # tests/functional/output_features/redundant-steps-quotes/redundant-steps-quotes.feature:2\n'
+        '    Given I have "stuff here" and "more @#$%ˆ& bizar sutff h3r3" # tests/functional/output_features/redundant-steps-quotes/redundant-steps-quotes.feature:3 (undefined)\n'
+        '    Given I have "blablabla" and "12345"                         # tests/functional/output_features/redundant-steps-quotes/redundant-steps-quotes.feature:4 (undefined)\n'
+        '\n'
+        '1 feature (0 passed)\n'
+        '1 scenario (0 passed)\n'
+        '2 steps (2 undefined, 0 passed)\n'
+        '\n'
+        'You can implement step definitions for undefined steps with these snippets:\n'
+        '\n'
+        "# -*- coding: utf-8 -*-\n"
+        'from lettuce import step\n'
+        '\n'
+        '@step(u\'Given I have "([^"]*)" and "([^"]*)"\')\n'
+        'def given_i_have_group1_and_group2(step, group1, group2):\n'
+        '    assert False, \'This step must be implemented\'\n'
     )
 
 @with_setup(prepare_stdout)
@@ -841,35 +841,35 @@ def test_output_snippets_with_normalized_unicode_names():
     runner.run()
 
     assert_stdout_lines(
-        u"\n"
-        u"Funcionalidade: melhorar o output de snippets do lettuce                                      # tests/functional/output_features/latin-accents/latin-accents.feature:2\n"
-        u"  Como autor do lettuce                                                                       # tests/functional/output_features/latin-accents/latin-accents.feature:3\n"
-        u"  Eu quero ter um output refinado de snippets                                                 # tests/functional/output_features/latin-accents/latin-accents.feature:4\n"
-        u"  Para melhorar, de uma forma geral, a vida do programador                                    # tests/functional/output_features/latin-accents/latin-accents.feature:5\n"
-        u"\n"
-        u"  Cenário: normalizar snippets com unicode                                                    # tests/functional/output_features/latin-accents/latin-accents.feature:7\n"
-        u"    Dado que eu tenho palavrões e outras situações                                            # tests/functional/output_features/latin-accents/latin-accents.feature:8 (undefined)\n"
-        u"    E várias palavras acentuadas são úteis, tais como: \"(é,não,léo,chororó,chácara,epígrafo)\" # tests/functional/output_features/latin-accents/latin-accents.feature:9 (undefined)\n"
-        u"    Então eu fico felizão                                                                     # tests/functional/output_features/latin-accents/latin-accents.feature:10 (undefined)\n"
-        u"\n"
-        u"1 feature (0 passed)\n"
-        u"1 scenario (0 passed)\n"
-        u"3 steps (3 undefined, 0 passed)\n"
-        u"\n"
-        u"You can implement step definitions for undefined steps with these snippets:\n"
-        u"\n"
-        u"# -*- coding: utf-8 -*-\n"
-        u"from lettuce import step\n"
-        u"\n"
-        u"@step(u'Dado que eu tenho palavrões e outras situações')\n"
-        u"def dado_que_eu_tenho_palavroes_e_outras_situacoes(step):\n"
-        u"    assert False, 'This step must be implemented'\n"
-        u"@step(u'E várias palavras acentuadas são úteis, tais como: \"([^\"]*)\"')\n"
-        u"def e_varias_palavras_acentuadas_sao_uteis_tais_como_group1(step, group1):\n"
-        u"    assert False, 'This step must be implemented'\n"
-        u"@step(u'Então eu fico felizão')\n"
-        u"def entao_eu_fico_felizao(step):\n"
-        u"    assert False, 'This step must be implemented'\n"
+        "\n"
+        "Funcionalidade: melhorar o output de snippets do lettuce                                      # tests/functional/output_features/latin-accents/latin-accents.feature:2\n"
+        "  Como autor do lettuce                                                                       # tests/functional/output_features/latin-accents/latin-accents.feature:3\n"
+        "  Eu quero ter um output refinado de snippets                                                 # tests/functional/output_features/latin-accents/latin-accents.feature:4\n"
+        "  Para melhorar, de uma forma geral, a vida do programador                                    # tests/functional/output_features/latin-accents/latin-accents.feature:5\n"
+        "\n"
+        "  Cenário: normalizar snippets com unicode                                                    # tests/functional/output_features/latin-accents/latin-accents.feature:7\n"
+        "    Dado que eu tenho palavrões e outras situações                                            # tests/functional/output_features/latin-accents/latin-accents.feature:8 (undefined)\n"
+        "    E várias palavras acentuadas são úteis, tais como: \"(é,não,léo,chororó,chácara,epígrafo)\" # tests/functional/output_features/latin-accents/latin-accents.feature:9 (undefined)\n"
+        "    Então eu fico felizão                                                                     # tests/functional/output_features/latin-accents/latin-accents.feature:10 (undefined)\n"
+        "\n"
+        "1 feature (0 passed)\n"
+        "1 scenario (0 passed)\n"
+        "3 steps (3 undefined, 0 passed)\n"
+        "\n"
+        "You can implement step definitions for undefined steps with these snippets:\n"
+        "\n"
+        "# -*- coding: utf-8 -*-\n"
+        "from lettuce import step\n"
+        "\n"
+        "@step(u'Dado que eu tenho palavrões e outras situações')\n"
+        "def dado_que_eu_tenho_palavroes_e_outras_situacoes(step):\n"
+        "    assert False, 'This step must be implemented'\n"
+        "@step(u'E várias palavras acentuadas são úteis, tais como: \"([^\"]*)\"')\n"
+        "def e_varias_palavras_acentuadas_sao_uteis_tais_como_group1(step, group1):\n"
+        "    assert False, 'This step must be implemented'\n"
+        "@step(u'Então eu fico felizão')\n"
+        "def entao_eu_fico_felizao(step):\n"
+        "    assert False, 'This step must be implemented'\n"
     )
 
 @with_setup(prepare_stdout)
